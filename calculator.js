@@ -52,4 +52,21 @@ equalBtn.style.margintop = "5px";
 equalBtn.style.marginBottom = "5px";
 numberButtonParentDiv.appendChild(equalBtn);
 
+numberbuttons = document.querySelector(".numbers");
+numberbuttons.addEventListener("click", function(event){
+    calculatorScreen.value += event.target.textContent;
+});
+
+operatorButtons.forEach((button) => {
+    button.addEventListener("click",function(event){
+        if(event.target.textContent === "AC"){
+        calculatorScreen.value = "";
+    }else if(['+','-','x','÷'].includes(event.target.textContent)){
+        if(!(['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
+            calculatorScreen.value += event.target.textContent;
+        }
+    }
+    })
+})
+
 
