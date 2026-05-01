@@ -68,27 +68,40 @@ operatorButtons.forEach((button) => {
         calculatorScreen.value = "";
     }else if(['+','-','x','÷'].includes(event.target.textContent)){
         if(!(['+','-','x','÷','.'].includes(calculatorScreen.value.slice(-1)))){
-            calculatorScreen.value += " " + event.target.textContent;
+            if(!calculatorScreen.value){
+                // Do nothing
+            }
+            if(calculatorScreen.value){
+                try{
+                    [num1, operator, num2] = calculatorScreen.value.split(" ");
+                    if(operate(num1, operator, num2) !== null){
+                        calculatorScreen.value = operate(num1, operator, num2);
+                    }
+                }catch(error){
+                    // Do nothing
+                }finally{
+                calculatorScreen.value += " " + event.target.textContent;
+                }
+            }
         }
     }
     })
 });
 
 decimalBtn.addEventListener("click", function(event){
-    if(!(['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
+    if(!(['+','-','x','÷'," ",""].includes(calculatorScreen.value.slice(-1)))){
             calculatorScreen.value += event.target.textContent;
     }
 });
 
 function operate(num1, operator, num2){
-    num1 = Number(num1);
-    num2 = Number(num2);
+    [num1,num2] = [Number(num1), Number(num2)];
     switch (operator){
         case '+' : return num1 + num2; break;
         case '-' : return num1 - num2; break;
         case 'x' : return num1 * num2; break;
         case '÷' : return num1 / num2; break;
-        default : return "WHAT??";
+        default : return null;
     }
 }
 
