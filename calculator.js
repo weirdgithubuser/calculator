@@ -55,7 +55,9 @@ numberButtonParentDiv.appendChild(equalBtn);
 
 numberbuttons = document.querySelector(".numbers");
 numberbuttons.addEventListener("click", function(event){
-    if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
+    if((['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
+        calculatorScreen.value += " " + event.target.textContent
+    }else if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
     // because clicking on calculator body was giving weird values on calculator screen
     calculatorScreen.value += event.target.textContent;
 }});    
@@ -66,7 +68,7 @@ operatorButtons.forEach((button) => {
         calculatorScreen.value = "";
     }else if(['+','-','x','÷'].includes(event.target.textContent)){
         if(!(['+','-','x','÷','.'].includes(calculatorScreen.value.slice(-1)))){
-            calculatorScreen.value += event.target.textContent;
+            calculatorScreen.value += " " + event.target.textContent;
         }
     }
     })
@@ -75,5 +77,26 @@ operatorButtons.forEach((button) => {
 decimalBtn.addEventListener("click", function(event){
     if(!(['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
             calculatorScreen.value += event.target.textContent;
+    }
+});
+
+function operate(num1, operator, num2){
+    num1 = Number(num1);
+    num2 = Number(num2);
+    switch (operator){
+        case '+' : return num1 + num2; break;
+        case '-' : return num1 - num2; break;
+        case 'x' : return num1 * num2; break;
+        case '÷' : return num1 / num2; break;
+        default : return "WHAT??";
+    }
+}
+
+equalBtn.addEventListener("click", function(event){
+    if(!(calculatorScreen.value)){
+        calculatorScreen.value = "";
+    }else{
+        [num1, operator, num2] = calculatorScreen.value.split(" ");
+        calculatorScreen.value = operate(num1, operator, num2);
     }
 });
