@@ -21,6 +21,7 @@ for(let i = 9; i >= 1; i--){
     newBtn.style.margintop = "5px";
     newBtn.style.marginBottom = "5px";
 }
+
 let decimalBtn = document.createElement("button");
 decimalBtn.textContent = ".";
 decimalBtn.style.width = `${(calculatorBody.offsetWidth-40)/3}px`;
@@ -54,19 +55,25 @@ numberButtonParentDiv.appendChild(equalBtn);
 
 numberbuttons = document.querySelector(".numbers");
 numberbuttons.addEventListener("click", function(event){
+    if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
+    // because clicking on calculator body was giving weird values on calculator screen
     calculatorScreen.value += event.target.textContent;
-});
+}});    
 
 operatorButtons.forEach((button) => {
     button.addEventListener("click",function(event){
         if(event.target.textContent === "AC"){
         calculatorScreen.value = "";
     }else if(['+','-','x','÷'].includes(event.target.textContent)){
-        if(!(['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
+        if(!(['+','-','x','÷','.'].includes(calculatorScreen.value.slice(-1)))){
             calculatorScreen.value += event.target.textContent;
         }
     }
     })
-})
+});
 
-
+decimalBtn.addEventListener("click", function(event){
+    if(!(['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
+            calculatorScreen.value += event.target.textContent;
+    }
+});
