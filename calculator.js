@@ -75,7 +75,9 @@ operatorButtons.forEach((button) => {
                 try{
                     [num1, operator, num2] = calculatorScreen.value.split(" ");
                     if(operate(num1, operator, num2) !== null){
-                        calculatorScreen.value = operate(num1, operator, num2).toFixed(2);
+                        let value = `${operate(num1, operator, num2)}`.includes(".") ?
+                        operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
+                        calculatorScreen.value = value;
                     }
                 }catch(error){
                     // Do nothing
@@ -96,20 +98,11 @@ decimalBtn.addEventListener("click", function(event){
 
 function operate(num1, operator, num2){
     [num1,num2] = [Number(num1), Number(num2)];
-    let solution;
     switch (operator){
-        case '+' : 
-            solution = String.from(num1 + num2).includes(".") ?
-            (num1 + num2).toFixed(2): (num1 + num2); return solution;
-        case '-' : 
-            solution = String.from(num1 - num2).includes(".") ?
-            (num1 - num2).toFixed(2): (num1 - num2); return solution;
-        case 'x' :
-            solution = String.from(num1 * num2).includes(".") ?
-            (num1 * num2).toFixed(2): (num1 * num2); return solution;
-        case '÷' :
-            solution = String.from(num1 / num2).includes(".") ?
-            (num1 / num2).toFixed(2): (num1 / num2); return solution;
+        case '+' : return num1 + num2; break;
+        case '-' : return num1 - num2; break;
+        case 'x' : return num1 * num2; break;
+        case '÷' : return num1 / num2; break;
         default : return null;
     }
 }
@@ -119,6 +112,8 @@ equalBtn.addEventListener("click", function(event){
         calculatorScreen.value = "";
     }else{
         [num1, operator, num2] = calculatorScreen.value.split(" ");
-        calculatorScreen.value = operate(num1, operator, num2);
+        let value = `${operate(num1, operator, num2)}`.includes(".") ?
+            operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
+        calculatorScreen.value = value;
     }
 });
