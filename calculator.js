@@ -58,10 +58,16 @@ numberButtonParentDiv.appendChild(equalBtn);
 
 numberbuttons = document.querySelector(".numbers");
 numberbuttons.addEventListener("click", function(event){
-    if((['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
-        calculatorScreen.value += " " + event.target.textContent;
-    }else if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
-        calculatorScreen.value += event.target.textContent;
+    if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
+        if((['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
+            if(calculatorScreen.value.slice(-1) === '-' && calculatorScreen.value.length === 1){
+                calculatorScreen.value += event.target.textContent;   
+            }else{
+                calculatorScreen.value += " " + event.target.textContent;
+            }
+        }else{
+            calculatorScreen.value += event.target.textContent;
+        }
     }
 });    
 
@@ -71,9 +77,6 @@ operatorButtons.forEach((button) => {
             calculatorScreen.value = "";
         }else if(['+','-','x','÷'].includes(event.target.textContent)){
             if(!(['+','-','x','÷','.'].includes(calculatorScreen.value.slice(-1)))){
-                if(!calculatorScreen.value){
-                    // Do nothing
-                }
                 if(calculatorScreen.value){
                     try{
                         [num1, operator, num2] = calculatorScreen.value.split(" ");
@@ -86,6 +89,11 @@ operatorButtons.forEach((button) => {
                         // Do nothing
                     }finally{
                         calculatorScreen.value += " " + event.target.textContent;
+                    }
+                }
+                if(!calculatorScreen.value){
+                    if(event.target.textContent === '-'){
+                        calculatorScreen.value = event.target.textContent;
                     }
                 }
             }
