@@ -3,6 +3,13 @@ body{
     flex-flow: column wrap;
     align-items: center;
 }
+
+p{
+    font-size: 10px;
+    text-align: center;
+    margin: 0px ;
+}
+
 .calculator-body{
     display: flex;
     font-size: large;
