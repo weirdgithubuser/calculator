@@ -1,6 +1,7 @@
 let calculatorBody = document.querySelector(".calculator-body");
 let calculatorScreen = document.querySelector(".calculator-screen");
 let operatorButtons = document.querySelectorAll(".operator");
+
 operatorButtons.forEach((button) =>{
     button.style.width = `${(calculatorBody.offsetWidth-40)/5}px`; 
     button.style.height = `40px`;
@@ -32,6 +33,7 @@ decimalBtn.style.marginLeft = "3px";
 decimalBtn.style.margintop = "5px";
 decimalBtn.style.marginBottom = "5px";
 numberButtonParentDiv.appendChild(decimalBtn);
+
 let zeroBtn = document.createElement("button");
 zeroBtn.textContent = "0";
 zeroBtn.style.width = `${(calculatorBody.offsetWidth-40)/3}px`;
@@ -42,6 +44,7 @@ zeroBtn.style.marginLeft = "3px";
 zeroBtn.style.margintop = "5px";
 zeroBtn.style.marginBottom = "5px";
 numberButtonParentDiv.appendChild(zeroBtn);
+
 let equalBtn = document.createElement("button");
 equalBtn.textContent = "=";
 equalBtn.style.width = `${(calculatorBody.offsetWidth-40)/3}px`;
@@ -56,43 +59,43 @@ numberButtonParentDiv.appendChild(equalBtn);
 numberbuttons = document.querySelector(".numbers");
 numberbuttons.addEventListener("click", function(event){
     if((['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
-        calculatorScreen.value += " " + event.target.textContent
+        calculatorScreen.value += " " + event.target.textContent;
     }else if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
-    // because clicking on calculator body was giving weird values on calculator screen
-    calculatorScreen.value += event.target.textContent;
-}});    
+        calculatorScreen.value += event.target.textContent;
+    }
+});    
 
 operatorButtons.forEach((button) => {
     button.addEventListener("click",function(event){
         if(event.target.textContent === "AC"){
-        calculatorScreen.value = "";
-    }else if(['+','-','x','÷'].includes(event.target.textContent)){
-        if(!(['+','-','x','÷','.'].includes(calculatorScreen.value.slice(-1)))){
-            if(!calculatorScreen.value){
-                // Do nothing
-            }
-            if(calculatorScreen.value){
-                try{
-                    [num1, operator, num2] = calculatorScreen.value.split(" ");
-                    if(operate(num1, operator, num2) !== null){
-                        let value = `${operate(num1, operator, num2)}`.includes(".") ?
-                        operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
-                        calculatorScreen.value = value;
-                    }
-                }catch(error){
+            calculatorScreen.value = "";
+        }else if(['+','-','x','÷'].includes(event.target.textContent)){
+            if(!(['+','-','x','÷','.'].includes(calculatorScreen.value.slice(-1)))){
+                if(!calculatorScreen.value){
                     // Do nothing
-                }finally{
-                calculatorScreen.value += " " + event.target.textContent;
+                }
+                if(calculatorScreen.value){
+                    try{
+                        [num1, operator, num2] = calculatorScreen.value.split(" ");
+                        if(operate(num1, operator, num2) !== null){
+                            let value = `${operate(num1, operator, num2)}`.includes(".") ?
+                            operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
+                            calculatorScreen.value = value;
+                        }
+                    }catch(error){
+                        // Do nothing
+                    }finally{
+                        calculatorScreen.value += " " + event.target.textContent;
+                    }
                 }
             }
         }
-    }
     })
 });
 
 decimalBtn.addEventListener("click", function(event){
     if(!(['+','-','x','÷'," ",""].includes(calculatorScreen.value.slice(-1)))){
-            calculatorScreen.value += event.target.textContent;
+        calculatorScreen.value += event.target.textContent;
     }
 });
 
