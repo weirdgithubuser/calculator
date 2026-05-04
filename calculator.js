@@ -117,3 +117,5 @@ equalBtn.addEventListener("click", function(event){
         calculatorScreen.value = value;
     }
 });
+
+calculatorScreen.addEventListener('keypress',(event) => event.preventDefault());
