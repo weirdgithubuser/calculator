@@ -60,8 +60,12 @@ numberbuttons = document.querySelector(".numbers");
 numberbuttons.addEventListener("click", function(event){
     if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
         if((['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
-            if(calculatorScreen.value.slice(-1) === '-' && calculatorScreen.value.length === 1){
-                calculatorScreen.value += event.target.textContent;   
+            if(calculatorScreen.value.slice(-1) === '-'){
+                if(calculatorScreen.value.length === 1 || ['x','÷'].includes(calculatorScreen.value.slice(-3,-2))){
+                    calculatorScreen.value += event.target.textContent;
+                }else{
+                    calculatorScreen.value +=  " " + event.target.textContent;
+                }   
             }else{
                 calculatorScreen.value += " " + event.target.textContent;
             }
@@ -69,7 +73,8 @@ numberbuttons.addEventListener("click", function(event){
             calculatorScreen.value += event.target.textContent;
         }
     }
-});    
+});   
+
 
 operatorButtons.forEach((button) => {
     button.addEventListener("click",function(event){
@@ -95,6 +100,11 @@ operatorButtons.forEach((button) => {
                     if(event.target.textContent === '-'){
                         calculatorScreen.value = event.target.textContent;
                     }
+                }
+            }
+            if((['x','÷'].includes(calculatorScreen.value.slice(-1)))){
+                if(event.target.textContent === "-"){
+                    calculatorScreen.value += " " + event.target.textContent;
                 }
             }
         }
@@ -129,4 +139,4 @@ equalBtn.addEventListener("click", function(event){
     }
 });
 
-calculatorScreen.addEventListener('keypress',(event) => event.preventDefault());
+calculatorScreen.addEventListener('keydown',(event) => event.preventDefault());
