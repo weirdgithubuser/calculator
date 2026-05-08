@@ -111,11 +111,22 @@ operatorButtons.forEach((button) => {
     })
 });
 
+let decimalEnabled = true;
 decimalBtn.addEventListener("click", function(event){
     if(!(['+','-','x','÷'," ",""].includes(calculatorScreen.value.slice(-1)))){
-        calculatorScreen.value += event.target.textContent;
-    }
-});
+        if(!(calculatorScreen.value.includes("."))){
+            calculatorScreen.value += event.target.textContent;
+        }else{
+            if(['+','-','x','÷'].includes(calculatorScreen.value.slice(calculatorScreen.value.indexOf(" ")+1, calculatorScreen.value.lastIndexOf(" ")))){
+                if(decimalEnabled){
+                    calculatorScreen.value += event.target.textContent;
+                    decimalEnabled = false;
+                }else{
+                    calculatorScreen.value = calculatorScreen.value;
+                }
+            }
+        }
+}});
 
 function operate(num1, operator, num2){
     [num1,num2] = [Number(num1), Number(num2)];
