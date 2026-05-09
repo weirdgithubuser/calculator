@@ -90,6 +90,7 @@ operatorButtons.forEach((button) => {
                             operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
                             calculatorScreen.value = value;
                         }
+                        decimalEnabled = true;
                     }catch(error){
                         // Do nothing
                     }finally{
@@ -148,6 +149,7 @@ equalBtn.addEventListener("click", function(event){
             operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
         calculatorScreen.value = value;
     }
+    decimalEnabled = true;
 });
 
 calculatorScreen.addEventListener('keydown',(event) => event.preventDefault());
