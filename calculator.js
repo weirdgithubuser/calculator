@@ -1,6 +1,8 @@
 let calculatorBody = document.querySelector(".calculator-body");
 let calculatorScreen = document.querySelector(".calculator-screen");
 let operatorButtons = document.querySelectorAll(".operator");
+let decimalEnabled = true;
+let clearScreen = false;
 
 operatorButtons.forEach((button) =>{
     button.style.width = `${(calculatorBody.offsetWidth-40)/5}px`; 
@@ -59,6 +61,10 @@ numberButtonParentDiv.appendChild(equalBtn);
 numberbuttons = document.querySelector(".numbers");
 numberbuttons.addEventListener("click", function(event){
     if(['0','1','2','3','4','5','6','7','8','9'].includes(event.target.textContent)){
+        if(clearScreen === true){
+            calculatorScreen.value = "";
+            clearScreen = false;
+        }
         if((['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
             if(calculatorScreen.value.slice(-1) === '-'){
                 if(calculatorScreen.value.length === 1 || ['x','÷'].includes(calculatorScreen.value.slice(-3,-2))){
@@ -78,6 +84,10 @@ numberbuttons.addEventListener("click", function(event){
 
 operatorButtons.forEach((button) => {
     button.addEventListener("click",function(event){
+        if(clearScreen === true){
+            calculatorScreen.value = "";
+            clearScreen = false;
+        }
         if(event.target.textContent === "AC"){
             calculatorScreen.value = "";
         }else if(['+','-','x','÷'].includes(event.target.textContent)){
@@ -112,7 +122,6 @@ operatorButtons.forEach((button) => {
     })
 });
 
-let decimalEnabled = true;
 decimalBtn.addEventListener("click", function(event){
     if(!(['+','-','x','÷'," ",""].includes(calculatorScreen.value.slice(-1)))){
         if(!(calculatorScreen.value.includes("."))){
@@ -150,6 +159,91 @@ equalBtn.addEventListener("click", function(event){
         calculatorScreen.value = value;
     }
     decimalEnabled = true;
+    clearScreen = true;
 });
 
-calculatorScreen.addEventListener('keydown',(event) => event.preventDefault());
+calculatorScreen.addEventListener('keydown',function(event){
+    event.preventDefault();
+    if(event.key === "Backspace"){
+        if(calculatorScreen.value.slice(-1) === "."){
+            decimalEnabled = true;
+        }
+        calculatorScreen.value = calculatorScreen.value.slice(0,-1);
+    }else if(event.key === "."){
+        if(!(['+','-','x','÷'," ",""].includes(calculatorScreen.value.slice(-1)))){
+            if(!(calculatorScreen.value.includes("."))){
+                calculatorScreen.value += event.key;
+            }else{
+                    if(['+','-','x','÷'].includes(calculatorScreen.value.slice(calculatorScreen.value.indexOf(" ")+1, calculatorScreen.value.lastIndexOf(" ")))){
+                    if(decimalEnabled){
+                        calculatorScreen.value += event.key;
+                        decimalEnabled = false;
+                    }else{
+                        calculatorScreen.value = calculatorScreen.value;
+                    }
+                    }
+            }
+        }
+    }else if(event.key === "Enter"){
+        if(!(calculatorScreen.value)){
+            calculatorScreen.value = "";
+        }else{
+            [num1, operator, num2] = calculatorScreen.value.split(" ");
+            let value = `${operate(num1, operator, num2)}`.includes(".") ?
+                operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
+            calculatorScreen.value = value;
+        }
+        decimalEnabled = true;
+        clearScreen = true;
+    }else if(['+','-','x','÷'].includes(event.key)){
+        if(clearScreen === true){
+            calculatorScreen.value = "";
+            clearScreen = false;
+        }
+        if(!(['+','-','x','÷','.'].includes(calculatorScreen.value.slice(-1)))){
+            if(calculatorScreen.value){
+                try{
+                    [num1, operator, num2] = calculatorScreen.value.split(" ");
+                    if(operate(num1, operator, num2) !== null){
+                        let value = `${operate(num1, operator, num2)}`.includes(".") ?
+                        operate(num1, operator, num2).toFixed(2) : operate(num1, operator, num2);
+                        calculatorScreen.value = value;
+                    }
+                    decimalEnabled = true;
+                }catch(error){
+                    // Do nothing
+                }finally{
+                    calculatorScreen.value += " " + event.key;
+                }
+            }
+            if(!calculatorScreen.value){
+                if(event.key === '-'){
+                    calculatorScreen.value = event.key;
+                }
+            }
+        }
+        if((['x','÷'].includes(calculatorScreen.value.slice(-1)))){
+            if(event.key === "-"){
+                calculatorScreen.value += " " + event.key;
+            }
+        }
+    }else if(['0','1','2','3','4','5','6','7','8','9'].includes(event.key)){
+        if(clearScreen === true){
+            calculatorScreen.value = "";
+            clearScreen = false;
+        }
+        if((['+','-','x','÷'].includes(calculatorScreen.value.slice(-1)))){
+            if(calculatorScreen.value.slice(-1) === '-'){
+                if(calculatorScreen.value.length === 1 || ['x','÷'].includes(calculatorScreen.value.slice(-3,-2))){
+                    calculatorScreen.value += event.key;
+                }else{
+                    calculatorScreen.value +=  " " + event.key;
+                }   
+            }else{
+                calculatorScreen.value += " " + event.key;
+            }
+        }else{
+            calculatorScreen.value += event.key;
+        }
+    }
+});
